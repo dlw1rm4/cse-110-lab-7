@@ -101,9 +101,16 @@ describe('Basic user flow for Website', () => {
   }, 10000);
 
   // Check to make sure that after you reload the page it remembers all of the items in your cart
-  it.skip('Checking number of items in cart on screen after reload', async () => {
+  it('Checking number of items in cart on screen after reload', async () => {
     console.log('Checking number of items in cart on screen after reload...');
 
+    await page.reload();
+    const buttonTexts = await page.$$eval('product-item', prodItems => {
+      return prodItems.map(item => item.shadowRoot.querySelector('button').innerText);
+    });
+    buttonTexts.forEach(text => expect(text).toBe('Remove from Cart'));
+
+    expect(await page.$eval('#cart-count', (cartCount) => cartCount.innerText)).toBe('20');
     /**
      **** TODO - STEP 4 **** 
      * Reload the page, then select all of the <product-item> elements, and check every
@@ -115,7 +122,7 @@ describe('Basic user flow for Website', () => {
   }, 10000);
 
   // Check to make sure that the cart in localStorage is what you expect
-  it.skip('Checking the localStorage to make sure cart is correct', async () => {
+  it('Checking the localStorage to make sure cart is correct', async () => {
 
     /**
      **** TODO - STEP 5 **** 
@@ -123,12 +130,14 @@ describe('Basic user flow for Website', () => {
        '[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]', check to make sure it is
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
+    const cart = await page.evaluate(() => localStorage.getItem('cart'));
+    expect(cart).toBe('[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]');
 
   });
 
   // Checking to make sure that if you remove all of the items from the cart that the cart
   // number in the top right of the screen is 0
-  it.skip('Checking number of items in cart on screen after removing from cart', async () => {
+  it('Checking number of items in cart on screen after removing from cart', async () => {
     console.log('Checking number of items in cart on screen...');
 
     /**
@@ -137,6 +146,12 @@ describe('Basic user flow for Website', () => {
      * Once you have, check to make sure that #cart-count is now 0
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
+    await page.$$eval('product-item', prodItems => {
+      prodItems.forEach(item => {
+        item.shadowRoot.querySelector('button').click();
+      });
+    });
+    expect(await page.$eval('#cart-count', (cartCount) => cartCount.innerText)).toBe('0');
 
   }, 10000);
 
