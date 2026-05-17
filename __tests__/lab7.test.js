@@ -24,26 +24,22 @@ describe('Basic user flow for Website', () => {
   it('Make sure <product-item> elements are populated', async () => {
     console.log('Checking to make sure <product-item> elements are populated...');
 
-    // Start as true, if any don't have data, swap to false
     let allArePopulated = true;
 
-    // Query select all of the <product-item> elements
     const prodItemsData = await page.$$eval('product-item', prodItems => {
       return prodItems.map(item => {
-        // Grab all of the json data stored inside
         return data = item.data;
       });
     });
 
     for (let i = 0; i < prodItemsData.length; i++) {
       console.log(`Checking product item 1/${prodItemsData.length}`);
-      // Make sure the title, price, and image are populated in the JSON
       firstValue = prodItemsData[i];
       if (firstValue.title.length == 0) { allArePopulated = false; }
       if (firstValue.price.length == 0) { allArePopulated = false; }
       if (firstValue.image.length == 0) { allArePopulated = false; }
     }
-    // Expect allArePopulated to still be true
+
     expect(allArePopulated).toBe(true);
 
     /**
@@ -82,6 +78,9 @@ describe('Basic user flow for Website', () => {
   // number in the top right has been correctly updated
   it('Checking number of items in cart on screen', async () => {
     console.log('Checking number of items in cart on screen...');
+    
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
 
     /**
      **** TODO - STEP 3 **** 
@@ -90,12 +89,13 @@ describe('Basic user flow for Website', () => {
      * Check to see if the innerText of #cart-count is 20
      * Remember to remove the .skip from this it once you are finished writing this test.
      */
-    const prodItems = await page.$$('product-item');
-    for (let i = 0; i < prodItems.length; i++) {
-      const shadowRoot = await prodItems[i].getProperty('shadowRoot');
-      const button = await shadowRoot.$('button');
-      await button.click();
-    }
+    // Query select all of the <product-item> elements
+    await page.$$eval('product-item', prodItems => {
+      prodItems.forEach(item => {
+        item.shadowRoot.querySelector('button').click();
+      });
+    });
+
     expect(await page.$eval('#cart-count', (cartCount) => cartCount.innerText)).toBe('20');
 
   }, 10000);
