@@ -4,7 +4,7 @@
 ---
 1) Where would you fit your automated tests in your Recipe project development pipeline? Select one of the following and explain why.
 
-**Within a Github action that runs whenever code is pushed **
+**Within a Github action that runs whenever code is pushed**
 Manually run them locally before pushing code
 Run them all after all development is completed
 
@@ -19,6 +19,6 @@ Navigation mode loads the page like a normal visitor and measures load-time perf
 
 4) Name three things we could do to improve the CSE 110 shop site based on the Lighthouse results.
 
-1. Make images by using thumbnails or new formats like WebP or AVIF. You can also use srcset so the browser downloads only what it needs. This makes the page load faster.
-2. Reduce things that block the page from loading. Only put important CSS directly on the page. This way the page becomes usable quicker. The Total Blocking Time goes down.
-3. Make the page more accessible. Ensure labels are clear. You can see which item is selected using a keyboard. This helps people using keyboards or screen readers. Improves the Accessibility score.
+  1. Make images by using thumbnails or new formats like WebP or AVIF. You can also use srcset so the browser downloads only what it needs. This makes the page load faster.
+  2. Reduce things that block the page from loading. Only put important CSS directly on the page. This way the page becomes usable quicker. The Total Blocking Time goes down.
+  3. Make the page more accessible. Ensure labels are clear. You can see which item is selected using a keyboard. This helps people using keyboards or screen readers. Improves the Accessibility score.
